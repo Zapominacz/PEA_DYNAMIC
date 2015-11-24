@@ -9,6 +9,7 @@ private:
 	SolutionSet* solutions;
 	bool isLoaded(SolutionSet::Solution* solution);
 	void loadKnownSolutions();
+	bool isNotSet(uinteger vertex_map, ubyte vertex);
 	SolutionSet::Solution* load(uinteger vertexMap);
 	ubyte* getSolution();
 	uinteger finalSolutionIndex();

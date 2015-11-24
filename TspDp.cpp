@@ -1,7 +1,7 @@
 #pragma once
 #include "TspDp.h"
 
-bool TspDp::isLoaded(SolutionSet::Solution* solution)
+inline bool TspDp::isLoaded(SolutionSet::Solution* solution)
 {
 	return solution->value != SolutionSet::INF;
 }
@@ -33,6 +33,11 @@ void TspDp::loadKnownSolutions()
 	}
 }
 
+inline bool TspDp::isNotSet(uinteger vertexMap, ubyte vertex)
+{
+	return !(vertexMap & (1 << (vertex - 1)));
+}
+
 ubyte* TspDp::getSolution()
 {
 	ubyte* solution = new ubyte[map->size];
@@ -54,16 +59,22 @@ inline uinteger TspDp::finalSolutionIndex()
 void TspDp::loadFinal()
 {
 	uinteger fullSet = finalSolutionIndex();
-	SolutionSet::Solution* best = nullptr;
+	ubyte bestVertex = SolutionSet::V_INF;
+	uinteger bestCost = SolutionSet::INF;
 	for (ubyte vertex = 1; vertex < map->size; vertex++)
 	{
 		uinteger currentSet = fullSet ^ (1 << (vertex - 1));
 		SolutionSet::Solution* solution = load(currentSet);
-		if(best == nullptr || best->value > solution->value)
+		uinteger tmpCost = solution->value + map->matrix[vertex][0];
+		if(bestCost > tmpCost)
 		{
-			best = solution;
+			bestVertex = vertex;
+			bestCost = tmpCost;
 		}
 	}
+	SolutionSet::Solution* finalSet = solutions->getSolution(fullSet);
+	finalSet->value = bestCost;
+	finalSet->lastVertex = bestVertex;
 }
 
 ubyte* TspDp::solve()
@@ -76,7 +87,28 @@ ubyte* TspDp::solve()
 
 SolutionSet::Solution* TspDp::load(uinteger vertexMap)
 {
-	
+	SolutionSet::Solution* currentSolution = solutions->getSolution(vertexMap);
+	if(!isLoaded(currentSolution))
+	{
+		uinteger bestCost = SolutionSet::INF;
+		ubyte bestVertex = SolutionSet::V_INF;
+		for (ubyte vertex = 1; vertex < map->size; vertex++)
+		{
+			if(!isNotSet(vertexMap, vertex))
+			{
+				uinteger currentSet = vertexMap ^ (1 << (vertex - 1));
+				SolutionSet::Solution* solution = load(currentSet);
+				uinteger tmpCost = solution->value + map->matrix[solution->lastVertex][vertex];
+				if (bestCost > tmpCost)
+				{
+					bestVertex = vertex;
+					bestCost = tmpCost;
+				}
+			}
+		}
+		currentSolution->lastVertex = bestVertex;
+		currentSolution->value = bestCost;
+	}
 	return currentSolution;
 }
 
