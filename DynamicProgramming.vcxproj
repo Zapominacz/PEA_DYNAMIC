@@ -147,6 +147,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DynamicProgramming.cpp" />
+    <ClCompile Include="TspDp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Edge.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="SolutionSet.h" />
+    <ClInclude Include="TspDp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
