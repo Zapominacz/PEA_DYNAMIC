@@ -16,14 +16,12 @@ public:
 	class Solution
 	{
 	public:
-		std::bitset<32> vertexBitmask; //1 - wierzcho³ek nale¿y, 0 - nie nale¿y
 		uinteger value; //wartoœæ, na pocz¹tku INF
 		ubyte lastVertex; //wierzcho³ek, który "wyprowadza" podrozwi¹zanie do po³¹czenia z kolejnym
 		Solution()
 		{
 			value = INF;
 			lastVertex = V_INF;
-			vertexBitmask.none();
 		}
 
 		~Solution(void)

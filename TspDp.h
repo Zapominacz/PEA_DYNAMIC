@@ -8,9 +8,14 @@ private:
 	Map* map;
 	SolutionSet* solutions;
 	bool isLoaded(SolutionSet::Solution* solution);
+	void loadKnownSolutions();
+	SolutionSet::Solution* load(uinteger vertexMap);
+	ubyte* getSolution();
+	uinteger finalSolutionIndex();
+	void loadFinal();
 public:
 	TspDp(Map* map);
 	~TspDp(void);
-	ubyte* getSolution(SolutionSet::Solution finalSolution);
 	ubyte* solve();
+	
 };

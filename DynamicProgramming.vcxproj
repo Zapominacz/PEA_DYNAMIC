@@ -150,7 +150,6 @@
     <ClCompile Include="TspDp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Edge.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="SolutionSet.h" />
     <ClInclude Include="TspDp.h" />
