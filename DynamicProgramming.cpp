@@ -18,8 +18,9 @@ int main(void) {
 	ubyte* result = dp->solve();
 	for (ubyte vertex = 0; vertex < baseMap->size; vertex++)
 	{
-		std::cout << vertex << " - ";
+		std::cout << static_cast<int>(result[vertex]) << " - ";
 	}
+	std::getchar();
 	delete dp;
 	delete baseMap;
 	return 0;

@@ -12,7 +12,7 @@ TspDp::TspDp(Map* map)
 	solutions = new SolutionSet(map->size);
 }
 
-TspDp::~TspDp()
+TspDp::~TspDp(void)
 {
 	delete solutions;
 }
@@ -20,7 +20,7 @@ TspDp::~TspDp()
 void TspDp::loadKnownSolutions()
 {
 	SolutionSet::Solution* currSolution = solutions->getSolution(0);
-	currSolution->lastVertex = 1;
+	currSolution->lastVertex = 0;
 	currSolution->value = 0;
 
 	uinteger solution = 0x00000001;
@@ -42,10 +42,10 @@ ubyte* TspDp::getSolution()
 {
 	ubyte* solution = new ubyte[map->size];
 	uinteger currentSet = finalSolutionIndex();
-	for (ubyte city = 0; city < map->size; city++)
+	for (ubyte city = map->size; city > 0; city--)
 	{
 		ubyte vertex = solutions->getSolution(currentSet)->lastVertex;
-		solution[city] = vertex;
+		solution[city - 1] = vertex;
 		currentSet ^= (1 << (vertex - 1));
 	}
 	return solution;
@@ -53,7 +53,7 @@ ubyte* TspDp::getSolution()
 
 inline uinteger TspDp::finalSolutionIndex()
 {
-	return (1 << (map->size - 1) - 1);
+	return ((1 << (map->size - 1)) - 1);
 }
 
 void TspDp::loadFinal()
@@ -65,7 +65,8 @@ void TspDp::loadFinal()
 	{
 		uinteger currentSet = fullSet ^ (1 << (vertex - 1));
 		SolutionSet::Solution* solution = load(currentSet);
-		uinteger tmpCost = solution->value + map->matrix[vertex][0];
+		uinteger tmpCost = solution->value + map->matrix[solution->lastVertex][vertex];
+		tmpCost += map->matrix[vertex][0];
 		if(bestCost > tmpCost)
 		{
 			bestVertex = vertex;

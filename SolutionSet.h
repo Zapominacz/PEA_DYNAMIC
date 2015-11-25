@@ -26,6 +26,7 @@ public:
 
 		~Solution(void)
 		{
+			printf("loL?");
 		}
 	};
 
@@ -34,7 +35,7 @@ public:
 	SolutionSet(byte size)
 	{
 		this->size = size;
-		uinteger requiredSize = (1 << (size - 1)) - 1;
+		auto requiredSize = ((1 << (size - 1)) - 1);
 		solutionsArray = new Solution[requiredSize];
 	}
 
