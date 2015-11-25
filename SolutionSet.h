@@ -17,16 +17,11 @@ public:
 	{
 	public:
 		uinteger value; //wartoœæ, na pocz¹tku INF
-		ubyte lastVertex; //wierzcho³ek, który "wyprowadza" podrozwi¹zanie do po³¹czenia z kolejnym
+		uinteger lastVertex; //wierzcho³ek, który "wyprowadza" podrozwi¹zanie do po³¹czenia z kolejnym
 		Solution()
 		{
 			value = INF;
 			lastVertex = V_INF;
-		}
-
-		~Solution(void)
-		{
-			printf("loL?");
 		}
 	};
 
@@ -35,7 +30,7 @@ public:
 	SolutionSet(byte size)
 	{
 		this->size = size;
-		auto requiredSize = ((1 << (size - 1)) - 1);
+		auto requiredSize = 1 << (size - 1);
 		solutionsArray = new Solution[requiredSize];
 	}
 
