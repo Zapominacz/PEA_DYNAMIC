@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <bitset>
 
 typedef uint8_t ubyte;
@@ -24,6 +25,7 @@ public:
 			lastVertex = V_INF;
 		}
 	};
+
 
 	class SolutionListItem
 	{

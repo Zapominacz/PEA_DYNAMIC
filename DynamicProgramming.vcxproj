@@ -147,10 +147,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DynamicProgramming.cpp" />
+    <ClCompile Include="MapGenerator.cpp" />
+    <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="TspDp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapGenerator.h" />
+    <ClInclude Include="MapLoader.h" />
     <ClInclude Include="SolutionSet.h" />
     <ClInclude Include="TspDp.h" />
   </ItemGroup>

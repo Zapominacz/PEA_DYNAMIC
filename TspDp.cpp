@@ -15,9 +15,10 @@ TspDp::TspDp(Map* map)
 TspDp::~TspDp(void)
 {
 	delete solutions;
+	solutions = nullptr;
 }
 
-void TspDp::loadKnownSolutions()
+void TspDp::loadKnownSolutions() const
 {
 	uinteger set = 0x00000001;
 	SolutionSet::Solution* solution;
@@ -30,7 +31,7 @@ void TspDp::loadKnownSolutions()
 	}
 }
 
-inline bool TspDp::isSet(uinteger vertexMap, ubyte vertex)
+inline bool TspDp::isSet(uinteger vertexMap, ubyte vertex) const
 {
 	return !(!(vertexMap & (1 << (vertex - 1))));
 }
@@ -39,7 +40,7 @@ ubyte* TspDp::getSolution(ubyte vertex)
 {
 	ubyte* result = new ubyte[map->size];
 	uinteger currentSet = finalSolutionIndex();
-	SolutionSet::Solution* solution = nullptr;
+	SolutionSet::Solution* solution;
 	for (ubyte city = map->size - 1; city > 0; city--)
 	{
 		result[city] = vertex;
@@ -51,7 +52,7 @@ ubyte* TspDp::getSolution(ubyte vertex)
 	return result;
 }
 
-inline uinteger TspDp::finalSolutionIndex()
+inline uinteger TspDp::finalSolutionIndex() const
 {
 	return ((1 << (map->size - 1)) - 1);
 }
@@ -64,14 +65,12 @@ ubyte* TspDp::loadFinal()
 	for (ubyte vertex = 1; vertex < map->size; vertex++)
 	{
 		uinteger cost = load(fullSet, vertex) + map->matrix[vertex][0];
-		if(bestCost > cost)
+		if (bestCost > cost)
 		{
 			bestVertex = vertex;
 			bestCost = cost;
 		}
 	}
-
-	//TODO koszt?
 	return getSolution(bestVertex);
 }
 
@@ -106,4 +105,3 @@ uinteger TspDp::load(uinteger vertexMap, ubyte endVertex)
 	}
 	return solution->value;
 }
-
