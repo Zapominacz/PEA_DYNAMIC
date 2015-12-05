@@ -24,23 +24,14 @@ TspDp::~TspDp(void)
 	}
 }
 
-void TspDp::loadKnownSolutions()
+void TspDp::loadKnownSolutions() const
 {
 	SolutionSet::Solution* currSolution = solutions->getSolution(0);
 	currSolution->lastVertex = 0;
 	currSolution->value = 0;
-
-	uinteger solution = 0x00000001;
-	for (ubyte vertex = 1; vertex < map->size; vertex++)
-	{
-		currSolution = solutions->getSolution(solution);
-		currSolution->lastVertex = vertex;
-		currSolution->value = map->matrix[0][vertex];
-		solution = solution << 1;
-	}
 }
 
-inline bool TspDp::isNotSet(uinteger vertexMap, ubyte vertex)
+inline bool TspDp::isNotSet(uinteger vertexMap, ubyte vertex) const
 {
 	return !(vertexMap & (1 << (vertex - 1)));
 }
@@ -60,9 +51,37 @@ ubyte* TspDp::getSolution()
 	return solution;
 }
 
-inline uinteger TspDp::finalSolutionIndex()
+inline uinteger TspDp::finalSolutionIndex() const
 {
 	return ((1 << (map->size - 1)) - 1);
+}
+
+void TspDp::loadSolutions() const
+{
+	using namespace std;
+	uinteger finalSolution = finalSolutionIndex();
+	for (uinteger solution = 0x00000001; solution < finalSolution; solution++)
+	{
+		SolutionSet::Solution* currentSolution = solutions->getSolution(solution);
+		uinteger bestCost = SolutionSet::INF;
+		ubyte bestVertex = SolutionSet::V_INF;
+		for (ubyte vertex = 1; vertex < map->size; vertex++)
+		{
+			if (!isNotSet(solution, vertex))
+			{
+				uinteger currentSet = solution ^ (1 << (vertex - 1));
+				SolutionSet::Solution* prevSolution = solutions->getSolution(currentSet);
+				uinteger tmpCost = prevSolution->value + map->matrix[prevSolution->lastVertex][vertex];
+				if (bestCost > tmpCost)
+				{
+					bestVertex = vertex;
+					bestCost = tmpCost;
+				}
+			}
+		}
+		currentSolution->lastVertex = bestVertex;
+		currentSolution->value = bestCost;
+	}
 }
 
 void TspDp::loadFinal()
@@ -73,7 +92,7 @@ void TspDp::loadFinal()
 	for (ubyte vertex = 1; vertex < map->size; vertex++)
 	{
 		uinteger currentSet = fullSet ^ (1 << (vertex - 1));
-		SolutionSet::Solution* solution = load(currentSet);
+		SolutionSet::Solution* solution = solutions->getSolution(currentSet);
 		uinteger tmpCost = solution->value + map->matrix[solution->lastVertex][vertex];
 		tmpCost += map->matrix[vertex][0];
 		if(bestCost > tmpCost)
@@ -90,50 +109,8 @@ void TspDp::loadFinal()
 ubyte* TspDp::solve()
 {
 	loadKnownSolutions();
+	loadSolutions();
 	loadFinal();
 	ubyte* solution = getSolution();
 	return solution;
 }
-
-SolutionSet::Solution* TspDp::load(uinteger vertexMap)
-{
-	SolutionSet::Solution* currentSolution = solutions->getSolution(vertexMap);
-	if(!isLoaded(currentSolution))
-	{
-		uinteger bestCost = SolutionSet::INF;
-		ubyte bestVertex = SolutionSet::V_INF;
-		for (ubyte vertex = 1; vertex < map->size; vertex++)
-		{
-			if(!isNotSet(vertexMap, vertex))
-			{
-				uinteger currentSet = vertexMap ^ (1 << (vertex - 1));
-				SolutionSet::Solution* solution = load(currentSet);
-				uinteger tmpCost = solution->value + map->matrix[solution->lastVertex][vertex];
-				if (bestCost > tmpCost)
-				{
-					bestVertex = vertex;
-					bestCost = tmpCost;
-				}
-			}
-		}
-		currentSolution->lastVertex = bestVertex;
-		currentSolution->value = bestCost;
-	}
-	return currentSolution;
-}
-
-//void dump()
-//{
-//	using namespace std;
-//	ofstream file;
-//	file.open("dump.txt", ios_base::trunc);
-//	unsigned requiredSize = 1 << (size - 1);
-//	for (unsigned i = 0; i < requiredSize; i++)
-//	{
-//		bitset<32> x(i);
-//		unsigned last = solutionsArray[i].lastVertex;
-//		unsigned val = solutionsArray[i].value;
-//		file << x << '\t' << last << '\t' << val << endl;
-//	}
-//	file.close();
-//}

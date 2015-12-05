@@ -8,11 +8,11 @@ private:
 	Map* map;
 	SolutionSet* solutions;
 	bool isLoaded(SolutionSet::Solution* solution);
-	void loadKnownSolutions();
-	bool isNotSet(uinteger vertex_map, ubyte vertex);
-	SolutionSet::Solution* load(uinteger vertexMap);
+	void loadKnownSolutions() const;
+	bool isNotSet(uinteger vertex_map, ubyte vertex) const;
 	ubyte* getSolution();
-	uinteger finalSolutionIndex();
+	uinteger finalSolutionIndex() const;
+	void loadSolutions() const;
 	void loadFinal();
 	ubyte* solution;
 public:
