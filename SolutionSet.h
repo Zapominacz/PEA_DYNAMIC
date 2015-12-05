@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <bitset>
 
 typedef uint8_t ubyte;
@@ -43,7 +44,7 @@ public:
 	{
 		return solutionsArray + index;
 	}
-	
+
 private:
 	byte size;
 };

@@ -9,12 +9,19 @@ inline bool TspDp::isLoaded(SolutionSet::Solution* solution)
 TspDp::TspDp(Map* map)
 {
 	this->map = map;
+	solution = nullptr;
 	solutions = new SolutionSet(map->size);
 }
 
 TspDp::~TspDp(void)
 {
 	delete solutions;
+	solutions = nullptr;
+	if(solution != nullptr)
+	{
+		delete solution;
+		solution = nullptr;
+	}
 }
 
 void TspDp::loadKnownSolutions()
@@ -40,13 +47,15 @@ inline bool TspDp::isNotSet(uinteger vertexMap, ubyte vertex)
 
 ubyte* TspDp::getSolution()
 {
-	ubyte* solution = new ubyte[map->size];
-	uinteger currentSet = finalSolutionIndex();
-	for (ubyte city = map->size; city > 0; city--)
-	{
-		ubyte vertex = solutions->getSolution(currentSet)->lastVertex;
-		solution[city - 1] = vertex;
-		currentSet ^= (1 << (vertex - 1));
+	if(solution == nullptr) {
+		this->solution = new ubyte[map->size];
+		uinteger currentSet = finalSolutionIndex();
+		for (ubyte city = map->size; city > 0; city--)
+		{
+			ubyte vertex = solutions->getSolution(currentSet)->lastVertex;
+			solution[city - 1] = vertex;
+			currentSet ^= (1 << (vertex - 1));
+		}
 	}
 	return solution;
 }
@@ -113,3 +122,18 @@ SolutionSet::Solution* TspDp::load(uinteger vertexMap)
 	return currentSolution;
 }
 
+//void dump()
+//{
+//	using namespace std;
+//	ofstream file;
+//	file.open("dump.txt", ios_base::trunc);
+//	unsigned requiredSize = 1 << (size - 1);
+//	for (unsigned i = 0; i < requiredSize; i++)
+//	{
+//		bitset<32> x(i);
+//		unsigned last = solutionsArray[i].lastVertex;
+//		unsigned val = solutionsArray[i].value;
+//		file << x << '\t' << last << '\t' << val << endl;
+//	}
+//	file.close();
+//}

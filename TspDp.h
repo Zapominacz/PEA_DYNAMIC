@@ -14,6 +14,7 @@ private:
 	ubyte* getSolution();
 	uinteger finalSolutionIndex();
 	void loadFinal();
+	ubyte* solution;
 public:
 	TspDp(Map* map);
 	~TspDp(void);
