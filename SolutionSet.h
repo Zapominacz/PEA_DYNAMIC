@@ -26,13 +26,40 @@ public:
 		}
 	};
 
-	Solution* solutionsArray;
+	class SubsetSolution
+	{
+	public:
+		Solution* solutions;
+		uinteger size;
+		uinteger from;
+
+		SubsetSolution()
+		{
+			size = 0;
+			solutions = nullptr;
+			from = 0;
+		}
+
+		~SubsetSolution(void)
+		{
+			delete[] solutions;
+			solutions = nullptr;
+			best = nullptr;
+		}
+
+		Solution* getSolution(unsigned sol)
+		{
+			return solutions + sol;
+		}
+	};
+
+	SubsetSolution* solutionsArray;
 
 	SolutionSet(byte size)
 	{
 		this->size = size;
-		auto requiredSize = 1 << (size - 1);
-		solutionsArray = new Solution[requiredSize];
+		unsigned requiredSize = 1 << (size - 1);
+		solutionsArray = new SubsetSolution[requiredSize];
 	}
 
 	~SolutionSet(void)
@@ -40,7 +67,7 @@ public:
 		delete[] solutionsArray;
 	}
 
-	Solution* getSolution(uinteger index)
+	SubsetSolution* getSolution(uinteger index)
 	{
 		return solutionsArray + index;
 	}
