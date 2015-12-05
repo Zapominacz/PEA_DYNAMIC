@@ -9,11 +9,11 @@ private:
 	SolutionSet* solutions;
 	bool isLoaded(SolutionSet::Solution* solution);
 	void loadKnownSolutions();
-	bool isNotSet(uinteger vertex_map, ubyte vertex);
-	SolutionSet::Solution* load(uinteger vertexMap);
-	ubyte* getSolution();
+	bool isSet(uinteger vertexMap, ubyte vertex);
+	uinteger load(uinteger vertexMap, ubyte vertex);
+	ubyte* getSolution(ubyte vertex);
 	uinteger finalSolutionIndex();
-	void loadFinal();
+	ubyte* loadFinal();
 public:
 	TspDp(Map* map);
 	~TspDp(void);

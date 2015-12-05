@@ -25,13 +25,35 @@ public:
 		}
 	};
 
-	Solution* solutionsArray;
+	class SolutionListItem
+	{
+	public:
+		SolutionListItem* next;
+		Solution* item;
+		ubyte vertex;
+
+		SolutionListItem()
+		{
+			next = nullptr;
+			item = nullptr;
+			vertex = V_INF;
+		}
+
+		~SolutionListItem()
+		{
+			delete item;
+			item = nullptr;
+			next = nullptr;
+		}
+	};
+
+	SolutionListItem* solutionsArray;
 
 	SolutionSet(byte size)
 	{
 		this->size = size;
 		auto requiredSize = 1 << (size - 1);
-		solutionsArray = new Solution[requiredSize];
+		solutionsArray = new SolutionListItem[requiredSize];
 	}
 
 	~SolutionSet(void)
@@ -39,11 +61,25 @@ public:
 		delete[] solutionsArray;
 	}
 
-	Solution* getSolution(uinteger index)
+	Solution* getSolution(uinteger map, ubyte vertex)
 	{
-		return solutionsArray + index;
+		SolutionListItem* item = solutionsArray + map;
+		SolutionListItem* prev = nullptr;
+		while(item != nullptr && item->vertex != vertex)
+		{
+			prev = item;
+			item = item->next;
+		}
+		if(item == nullptr)
+		{
+			SolutionListItem* newItem = new SolutionListItem();
+			newItem->vertex = vertex;
+			newItem->item = new Solution();
+			prev->next = newItem;
+			item = newItem;
+		}
+		return item->item;
 	}
-	
 private:
 	byte size;
 };
