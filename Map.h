@@ -1,6 +1,10 @@
 #pragma once
 #include "SolutionSet.h"
 
+/*
+Miko³aj Styœ, 209773
+Reprezentuje mapê miast z wagami przejœæ
+*/
 class Map
 {
 public:

@@ -2,6 +2,10 @@
 #include "SolutionSet.h"
 #include "Map.h"
 
+/*
+Miko³aj Styœ, 209773
+Reprezentuje klasê rozwi¹zauj¹c¹ problem komiwoja¿era metod¹ Dynamic Programming
+*/
 class TspDp
 {
 private:

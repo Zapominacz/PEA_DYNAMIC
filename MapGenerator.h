@@ -1,6 +1,9 @@
 #pragma once
 #include "Map.h"
-
+/*
+Miko³aj Styœ, 209773
+Generator intancji asymetrycznego problemu komiwoja¿era
+*/
 class MapGenerator
 {
 private:

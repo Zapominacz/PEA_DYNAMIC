@@ -6,37 +6,44 @@
 #include "TspDp.h"
 #include "MapLoader.h"
 #include "MapGenerator.h"
-
+#include <ctime>
 
 const bool TEST = false;
 
-void test()
+void test() 
 {
 	using namespace std;
 	MapGenerator* generator = new MapGenerator();
-	unsigned sizes[] = {4, 5, 6, 7, 8, 9, 10};
-	unsigned sizesLenght = 7;
-	unsigned repeats = 10;
+	unsigned sizes[] = {4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+	unsigned sizesLenght = 17;
+	unsigned repeats = 100;
 	ofstream file;
 	file.open("results.txt", ios_base::app);
 	for (unsigned size = 0; size < sizesLenght; size++)
 	{
-		Map* map = generator->generate(size);
+		double average = 0;
 		for (unsigned repeat = 0; repeat < repeats; repeat++)
 		{
+			Map* map = generator->generate(sizes[size]);
 			TspDp* dp = new TspDp(map);
+			clock_t begin = clock();
 			ubyte* result = dp->solve();
+			clock_t end = clock();
 			unsigned sum = 0;
 			for (ubyte vertex = 0; vertex < map->size - 1; vertex++)
 			{
-				sum += result[vertex];
-				file << static_cast<int>(result[vertex]) << " - ( " << map->matrix[result[vertex]][result[vertex + 1]] << " ) - > ";
+				unsigned weight = map->matrix[result[vertex]][result[vertex + 1]];
+				sum += weight;
 			}
-			sum += result[map->size - 1];
-			file << static_cast<int>(result[map->size - 1]) << " - ( " << map->matrix[result[map->size - 1]][result[0]] << " ) - > 0" << endl;;
-			file << "Suma: " << sum << endl;
+			unsigned weight = map->matrix[result[map->size - 1]][result[0]];
+			sum += weight;
+			cout << "Suma: " << sum << endl;
+			double elapsed_secs = double(end - begin);
+			average += elapsed_secs;
 			delete dp;
 		}
+		average /= sizesLenght;
+		file << sizes[size] << '\t' << average << endl;
 	}
 	file.close();
 	delete generator;

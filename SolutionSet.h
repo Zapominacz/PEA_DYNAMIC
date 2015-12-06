@@ -7,14 +7,17 @@ typedef uint8_t ubyte;
 typedef int8_t byte;
 typedef int32_t integer;
 typedef uint32_t uinteger;
-
+/*
+Miko³aj Styœ, 209773
+Zbiór w którym zapisywane s¹ poœrednie rozwi¹zania
+*/
 class SolutionSet
 {
 public:
 	static const uinteger INF = UINT32_MAX; //INF - zazwyczaj oznacza brak krawêdzi
 	static const ubyte V_INF = UINT8_MAX; //brak wierzcho³ka
 
-	class Solution
+	class Solution //rozwi¹zanie dla danej kombinacji wierzcho³ków i wierzcho³ka
 	{
 	public:
 		uinteger value; //wartoœæ, na pocz¹tku INF
@@ -27,7 +30,7 @@ public:
 	};
 
 
-	class SolutionListItem
+	class SolutionListItem //tworzy listê trzymaj¹c¹ rozwi¹zania dla danego zbioru
 	{
 	public:
 		SolutionListItem* next;
